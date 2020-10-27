@@ -1,12 +1,29 @@
+import { dataStundent } from './dataStudent.js';
 import { dataCourses } from './dataCourses.js';
 var coursesTbody = document.getElementById("courses");
+var personalDtaTBody = document.getElementById("personalData");
 var btnfilterByName = document.getElementById("button-filterByName");
+var btnfilterByCredits = document.getElementById("button-filterByCredits");
 var inputSearchBox = document.getElementById("search-box");
+var inputMinBox = document.getElementById("min-search-box");
+var inputMaxBox = document.getElementById("max-search-box");
 var totalCreditElm = document.getElementById("total-credits");
 btnfilterByName.onclick = function () { return applyFilterByName(); }; //duda: por que no simplemente asignarle al evento "onclick" la funcion applyFilterByName()?
+btnfilterByCredits.onclick = function () { return applyFilterByCredits(); };
 //asocia el evento con una
+renderPersonalData(dataStundent); //llamar al render de personalData
 renderCoursesInTable(dataCourses);
 totalCreditElm.innerHTML = "" + getTotalCredits(dataCourses);
+function renderPersonalData(student) {
+    console.log('Desplegando info del estudiante');
+    for (var _i = 0, _a = Object.entries(student); _i < _a.length; _i++) {
+        var _b = _a[_i], key = _b[0], value = _b[1];
+        console.log(key + ':' + value);
+        var trElement = document.createElement("tr");
+        trElement.innerHTML = "<td>" + key + "</td>\n                               <td>" + value + "</td>";
+        personalDtaTBody.appendChild(trElement);
+    }
+}
 function renderCoursesInTable(courses) {
     console.log('Desplegando cursos');
     courses.forEach(function (course) {
@@ -19,6 +36,40 @@ function renderCoursesInTable(courses) {
     //jQuery $: sign to define/access jQuery
     // A (selector) to "query HTML" elements
     //A jQuery action() to be performed on the element(s)
+}
+function applyFilterByCredits() {
+    var min = parseInt(inputMinBox.value);
+    var max = parseInt(inputMaxBox.value);
+    var courses = dataCourses;
+    var coursesFiltered = [];
+    min = (min == null) ? 0 : min;
+    max = (max == null) ? getTotalCredits(dataCourses) : max;
+    clearCoursesInTable();
+    courses.sort(function (c1, c2) {
+        if (c1.credits > c2.credits)
+            return 1;
+        else if (c1.credits < c2.credits)
+            return -1;
+        else
+            return 0;
+    });
+    var minIndex = searchIndexOfCredits(min, 0, courses.length - 1, courses);
+    var maxIndex = searchIndexOfCredits(max, 0, courses.length - 1, courses);
+    for (var i = minIndex; i <= maxIndex; i++) {
+        coursesFiltered.push(courses[i]);
+    }
+    renderCoursesInTable(coursesFiltered);
+}
+function searchIndexOfCredits(target, lo, hi, sortedCourses) {
+    var mid = Math.floor((hi / 2) + lo);
+    if (mid == sortedCourses.length)
+        --mid;
+    if (target > sortedCourses[mid].credits)
+        return searchIndexOfCredits(target, mid, hi, sortedCourses);
+    else if (target < sortedCourses[mid].credits)
+        return searchIndexOfCredits(target, lo, mid, sortedCourses);
+    else
+        return mid;
 }
 function applyFilterByName() {
     var text = inputSearchBox.value; // let text = inputSearchBox.value!<--?
@@ -38,7 +89,7 @@ function searchCourseByName(nameKey, courses) {
     }
     else {
         courseStrings = nameKey.split(",");
-        courses.sort((c1,c2) => c1.name.localeCompare(c2.name));
+        courses.sort(function (c1, c2) { return c1.name.localeCompare(c2.name); });
         console.log(courses);
         var _loop_1 = function (i) {
             var sCourse = courseStrings[i];

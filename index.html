@@ -13,7 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     
-
+    
     <div class="container">
         <div class="row">
           <div class="col-sm-6">
@@ -25,12 +25,6 @@
               <div class="card-body">
                 <table class="table table-bordered table-dark" style="padding-top: 15px;">
                   <h3 class="myTitle">Datos Personales</h3>
-                  <thead>
-                      <tr>
-                         <th>KEY</th>
-                         <th>VALUE</th>
-                      </tr>
-                   </thead>
                   <tbody id = "personalData">
                   </tbody>
                 </table>
@@ -58,6 +52,19 @@
                 </div>
               </div>
             </div>
+            <form style="margin:10px;">
+              <div class="form-row">
+                <div class="col">
+                  <input type="text" class="form-control" id="min-search-box" placeholder="Minimo de Creditos">
+                </div>
+                <div class="col">
+                  <input type="text" class="form-control" id="max-search-box" placeholder="Maximo de Creditos">
+                </div>
+                <div class="col">
+                  <button type="button" id="button-filterByCredits" class="btn btn-success">Aplicar</button>
+                </div>
+              </div>
+            </form>
             <form style="margin:10px;">
               <div class="form-row">
                 <div class="col">
